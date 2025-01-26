@@ -1,11 +1,11 @@
-<h3>Consommation mensuelle</h3>
+<h3>Consommatttion mensuelle</h3>
 <table id="consumptionTable" border="1" style="border-collapse: collapse; width: 100%; text-align: center;">
     <thead>
         <tr>
-            <th>Mois</th>
-            <th>Consommation (€)</th>
-            <th>Consommation (kWh)</th>
-            <th>Coût par kWh (€)</th>
+            <th style="width: 20%;">Mois</th>
+            <th style="width: 25%;">Consommation (€)</th>
+            <th style="width: 25%;">Consommation (kWh)</th>
+            <th style="width: 30%;">Coût par kWh (€)</th>
         </tr>
     </thead>
     <tbody>
@@ -20,8 +20,8 @@
                 document.write(`
                     <tr>
                         <td>${month}</td>
-                        <td><input type="number" id="euros_${index}" class="euroInput" oninput="calculateCost(${index})" placeholder="€" style="width: 100%;"></td>
-                        <td><input type="number" id="kwh_${index}" class="kwhInput" oninput="calculateCost(${index})" placeholder="kWh" style="width: 100%;"></td>
+                        <td><input type="number" id="euros_${index}" class="euroInput" oninput="calculateCost(${index})" placeholder="€" style="width: 90%;"></td>
+                        <td><input type="number" id="kwh_${index}" class="kwhInput" oninput="calculateCost(${index})" placeholder="kWh" style="width: 90%;"></td>
                         <td id="costPerKwh_${index}">-</td>
                     </tr>
                 `);
@@ -32,7 +32,7 @@
             <td><strong>Total annuel</strong></td>
             <td id="totalEuros">-</td>
             <td id="totalKwh">-</td>
-            <td>-</td>
+            <td id="totalCostPerKwh">-</td>
         </tr>
     </tbody>
 </table>
@@ -72,8 +72,12 @@
             totalKwh += kwh;
         }
 
+        // Calculer le coût moyen par kWh
+        const averageCostPerKwh = totalKwh > 0 ? (totalEuros / totalKwh).toFixed(2) : "-";
+
         // Mettre à jour les cellules des totaux
         document.getElementById("totalEuros").textContent = `${totalEuros.toFixed(2)} €`;
         document.getElementById("totalKwh").textContent = `${totalKwh.toFixed(2)} kWh`;
+        document.getElementById("totalCostPerKwh").textContent = totalKwh > 0 ? `${averageCostPerKwh} €` : "-";
     }
 </script>
