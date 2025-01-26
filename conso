@@ -1,0 +1,79 @@
+<h3>Consommation mensuelle</h3>
+<table id="consumptionTable" border="1" style="border-collapse: collapse; width: 100%; text-align: center;">
+    <thead>
+        <tr>
+            <th>Mois</th>
+            <th>Consommation (€)</th>
+            <th>Consommation (kWh)</th>
+            <th>Coût par kWh (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Générer les lignes pour chaque mois -->
+        <script>
+            const months = [
+                "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+            ];
+
+            months.forEach((month, index) => {
+                document.write(`
+                    <tr>
+                        <td>${month}</td>
+                        <td><input type="number" id="euros_${index}" class="euroInput" oninput="calculateCost(${index})" placeholder="€" style="width: 100%;"></td>
+                        <td><input type="number" id="kwh_${index}" class="kwhInput" oninput="calculateCost(${index})" placeholder="kWh" style="width: 100%;"></td>
+                        <td id="costPerKwh_${index}">-</td>
+                    </tr>
+                `);
+            });
+        </script>
+        <!-- Ligne pour les totaux -->
+        <tr>
+            <td><strong>Total annuel</strong></td>
+            <td id="totalEuros">-</td>
+            <td id="totalKwh">-</td>
+            <td>-</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    // Fonction pour calculer le coût par kWh pour un mois donné
+    function calculateCost(index) {
+        const eurosInput = document.getElementById(`euros_${index}`);
+        const kwhInput = document.getElementById(`kwh_${index}`);
+        const costPerKwhCell = document.getElementById(`costPerKwh_${index}`);
+
+        const euros = parseFloat(eurosInput.value) || 0;
+        const kwh = parseFloat(kwhInput.value) || 0;
+
+        // Calculer le coût par kWh
+        if (kwh > 0) {
+            const costPerKwh = (euros / kwh).toFixed(2); // Résultat arrondi à 2 décimales
+            costPerKwhCell.textContent = `${costPerKwh} €`;
+        } else {
+            costPerKwhCell.textContent = "-";
+        }
+
+        calculateTotals(); // Met à jour les totaux
+    }
+
+    // Fonction pour calculer les totaux annuels
+    function calculateTotals() {
+        let totalEuros = 0;
+        let totalKwh = 0;
+
+        // Parcourir toutes les lignes des mois
+        for (let i = 0; i < 12; i++) {
+            const euros = parseFloat(document.getElementById(`euros_${i}`).value) || 0;
+            const kwh = parseFloat(document.getElementById(`kwh_${i}`).value) || 0;
+
+            totalEuros += euros;
+            totalKwh += kwh;
+        }
+
+        // Mettre à jour les cellules des totaux
+        document.getElementById("totalEuros").textContent = `${totalEuros.toFixed(2)} €`;
+        document.getElementById("totalKwh").textContent = `${totalKwh.toFixed(2)} kWh`;
+    }
+</script>
